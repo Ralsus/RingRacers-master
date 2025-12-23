@@ -10,6 +10,7 @@
 /// \brief Charyb's vertex slope anchors.
 ///        This file is self contained to avoid a Big Large merge conflict.
 
+#include "doomdef.h"
 #include "taglist.h"
 
 /*

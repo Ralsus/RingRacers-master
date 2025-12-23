@@ -11,10 +11,23 @@
 
 #include "../k_menu.h"
 #include "../r_main.h"	// cv_skybox
+
+#ifdef HWRENDER
 #include "../hardware/hw_main.h"	// gl consvars
+#endif
+
 #include "../i_video.h" // rendermode
 
 extern consvar_t cv_menuframeskip;
+
+// Stub consvars for when HWRENDER is not defined
+#ifndef HWRENDER
+consvar_t cv_glmodels = {"models", "Off", 0, NULL, NULL, 0, NULL, NULL, 0, 0, NULL};
+consvar_t cv_glshaders = {"shaders", "Off", 0, NULL, NULL, 0, NULL, NULL, 0, 0, NULL};
+consvar_t cv_glanisotropicmode = {"anisotropicmode", "0", 0, NULL, NULL, 0, NULL, NULL, 0, 0, NULL};
+consvar_t cv_glspritebillboarding = {"spritebillboarding", "Off", 0, NULL, NULL, 0, NULL, NULL, 0, 0, NULL};
+consvar_t cv_glshearing = {"shearing", "Off", 0, NULL, NULL, 0, NULL, NULL, 0, 0, NULL};
+#endif
 
 // see vaopt_e
 menuitem_t OPTIONS_VideoAdvanced[] =
