@@ -1,5 +1,4 @@
 # Ring Racers Android - Full Native Build
-# This CMakeLists compiles Ring Racers with SDL2 for Android
 cmake_minimum_required(VERSION 3.18)
 project(ringracers LANGUAGES C CXX)
 
@@ -55,19 +54,21 @@ endif()
 message(STATUS "Source: ${SRB2_SRC}")
 
 #######################################
-# Collect ALL source files
+# Collect source files
 #######################################
 
 # Core game files
 file(GLOB CORE_C_SOURCES "${SRB2_SRC}/*.c")
 file(GLOB CORE_CPP_SOURCES "${SRB2_SRC}/*.cpp")
 
-# Remove platform-specific files we don't want
+# Remove files we don't want
 list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*vid_copy\\.s$")
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*tmap.*\\.nas$")
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*tmap.*$")
 list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*discord\\.c$")
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*apng\\.c$")  # No libpng
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*stun\\.cpp$")  # No network
 
-# SDL implementation (replaces android/ files)
+# SDL implementation
 set(SDL_SOURCES
     ${SRB2_SRC}/sdl/i_system.cpp
     ${SRB2_SRC}/sdl/i_video.cpp
@@ -77,8 +78,6 @@ set(SDL_SOURCES
     ${SRB2_SRC}/sdl/new_sound.cpp
     ${SRB2_SRC}/sdl/dosstr.c
     ${SRB2_SRC}/sdl/endtxt.c
-    ${SRB2_SRC}/sdl/hwsym_sdl.c
-    ${SRB2_SRC}/sdl/ogl_sdl.c
 )
 
 # Lua (blua)
@@ -90,7 +89,7 @@ file(GLOB AUDIO_SOURCES "${SRB2_SRC}/audio/*.c" "${SRB2_SRC}/audio/*.cpp")
 # Core utilities
 file(GLOB CORE_DIR_SOURCES "${SRB2_SRC}/core/*.c" "${SRB2_SRC}/core/*.cpp")
 
-# ACS (action code script)
+# ACS
 file(GLOB ACS_SOURCES "${SRB2_SRC}/acs/*.c" "${SRB2_SRC}/acs/*.cpp")
 
 # Objects
@@ -111,23 +110,14 @@ file(GLOB MODP_SOURCES "${SRB2_SRC}/modp_b64/*.c")
 # IO
 file(GLOB IO_SOURCES "${SRB2_SRC}/io/*.c" "${SRB2_SRC}/io/*.cpp")
 
-# RHI (Render Hardware Interface) - OpenGL ES
-file(GLOB RHI_SOURCES "${SRB2_SRC}/rhi/*.c" "${SRB2_SRC}/rhi/*.cpp")
-set(RHI_GLES_SOURCES
-    ${SRB2_SRC}/sdl/rhi_gles2_platform.cpp
-)
-
-# HWR2 (Hardware Renderer 2)
-file(GLOB HWR2_SOURCES "${SRB2_SRC}/hwr2/*.c" "${SRB2_SRC}/hwr2/*.cpp")
-
-# Our Android JNI bridge
+# JNI bridge
 set(ANDROID_JNI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/android_jni.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/touch_input.cpp
 )
 
 #######################################
-# Create native library
+# Create library
 #######################################
 add_library(ringracers SHARED
     ${CORE_C_SOURCES}
@@ -150,18 +140,16 @@ add_library(ringracers SHARED
 # Compile definitions
 #######################################
 target_compile_definitions(ringracers PRIVATE
-    # Platform
     ANDROID
     LINUX
     UNIXCOMMON
     
-    # SDL
     HAVE_SDL
     HAVE_MIXER
     SOUND=SOUND_MIXER
     DIRECTFULLSCREEN
     
-    # Disable features for initial port
+    # Disable features
     NONX86
     NOASM
     NOEXECINFO
@@ -170,24 +158,23 @@ target_compile_definitions(ringracers PRIVATE
     NOHW
     NONET
     NOMUMBLE
+    NOPNG      # Disable PNG - no libpng
     
-    # Enable
     HAVE_ZLIB
-    HAVE_PNG
     HAVE_THREADS
     
-    # Config
     CMAKECONFIG
     _LARGEFILE64_SOURCE
 )
 
 #######################################
-# Include directories
+# Include directories  
 #######################################
 target_include_directories(ringracers PRIVATE
     ${SRB2_SRC}
     ${SRB2_SRC}/blua
     ${SRB2_SRC}/sdl
+    ${CMAKE_CURRENT_SOURCE_DIR}
     $<TARGET_PROPERTY:SDL2,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
@@ -210,20 +197,8 @@ target_compile_options(ringracers PRIVATE
     -fPIC
     -fexceptions
     -frtti
-    
-    # Suppress common warnings
-    -Wno-unused-variable
-    -Wno-unused-function
-    -Wno-unused-but-set-variable
-    -Wno-missing-field-initializers
-    -Wno-sign-compare
-    -Wno-implicit-function-declaration
-    -Wno-int-conversion
-    -Wno-pointer-sign
-    -Wno-incompatible-pointer-types
-    -Wno-format
-    -Wno-deprecated-declarations
+    -Wno-all
+    -Wno-error
 )
 
 message(STATUS "Ring Racers Android configured")
-message(STATUS "Core sources: ${SRB2_SRC}")
