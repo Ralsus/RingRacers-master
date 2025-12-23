@@ -189,6 +189,7 @@ target_include_directories(ringracers PRIVATE
     ${THIRDPARTY}/fmt/include
     ${THIRDPARTY}/nlohmann-json/include
     ${THIRDPARTY}/stb/include
+    ${THIRDPARTY}/xmp-lite/include/libxmp-lite
     $<TARGET_PROPERTY:SDL2,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
