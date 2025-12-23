@@ -188,6 +188,7 @@ target_include_directories(ringracers PRIVATE
     ${THIRDPARTY}/tcbrindle_span/include
     ${THIRDPARTY}/fmt/include
     ${THIRDPARTY}/nlohmann-json/include
+    ${THIRDPARTY}/stb/include
     $<TARGET_PROPERTY:SDL2,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
