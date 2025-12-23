@@ -34,13 +34,4 @@
 #define COMPGITBRANCH ""
 #define COMPGITHASH ""
 
-// Stub for OpenGL variables when NOHW is defined
-#ifdef NOHW
-// cv_glshearing is used in p_user.c but only for OpenGL mode
-// Create a dummy struct to prevent compile errors
-typedef struct { int value; } consvar_stub_t;
-static const consvar_stub_t cv_glshearing = {0};
-#endif
-
 #endif // __CONFIG_H__
-
