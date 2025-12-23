@@ -11,6 +11,11 @@
 ///        This file is self contained to avoid a Big Large merge conflict.
 
 #include "doomdef.h"
+#include "r_defs.h"
+#include "r_state.h"
+#include "z_zone.h"
+#include "p_local.h"
+#include "p_spec.h"
 #include "taglist.h"
 
 /*
