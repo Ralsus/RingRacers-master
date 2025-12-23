@@ -1,0 +1,36 @@
+# Android project
+android-project/.gradle/
+android-project/build/
+android-project/app/build/
+android-project/app/.cxx/
+android-project/local.properties
+
+# SDL2 (downloaded during build)
+android-project/app/src/main/cpp/SDL2/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Game assets (too large for git)
+android-project/app/src/main/assets/gamedata/*.pk3
+android-project/app/src/main/assets/gamedata/*.wad
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# Build
+*.apk
+*.aab
+*.dex
+*.class
+
+# Logs
+*.log
