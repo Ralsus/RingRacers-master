@@ -17,10 +17,6 @@ android-project/app/src/main/cpp/SDL2/
 .DS_Store
 Thumbs.db
 
-# Game assets (too large for git)
-android-project/app/src/main/assets/gamedata/*.pk3
-android-project/app/src/main/assets/gamedata/*.wad
-
 # Gradle
 .gradle/
 gradle-app.setting
@@ -34,3 +30,4 @@ gradle-app.setting
 
 # Logs
 *.log
+
