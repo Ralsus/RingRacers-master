@@ -61,19 +61,24 @@ message(STATUS "Source: ${SRB2_SRC}")
 file(GLOB CORE_C_SOURCES "${SRB2_SRC}/*.c")
 file(GLOB CORE_CPP_SOURCES "${SRB2_SRC}/*.cpp")
 
-# Remove files we don't want
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*vid_copy\\.s$")
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*tmap.*$")
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*discord\\.c$")
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*apng\\.c$")  # No libpng
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*stun\\.cpp$")  # No network
+# Remove files we don't need for Android
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*apng\\.c$")
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*d_clisrv\\.c$")      # Network - uses opus
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*d_net\\.cpp$")       # Network
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*d_netfil\\.c$")      # Network
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*d_netcmd\\.c$")      # Network
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*mserv\\.c$")         # Master server
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*http-mserv\\.c$")    # HTTP master server
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*i_tcp\\.c$")         # TCP networking
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*stun\\.cpp$")        # STUN
+list(FILTER CORE_CPP_SOURCES EXCLUDE REGEX ".*d_net\\.cpp$")
+list(FILTER CORE_CPP_SOURCES EXCLUDE REGEX ".*stun\\.cpp$")
 
 # SDL implementation
 set(SDL_SOURCES
     ${SRB2_SRC}/sdl/i_system.cpp
     ${SRB2_SRC}/sdl/i_video.cpp
     ${SRB2_SRC}/sdl/i_main.cpp
-    ${SRB2_SRC}/sdl/i_net.c
     ${SRB2_SRC}/sdl/i_threads.c
     ${SRB2_SRC}/sdl/new_sound.cpp
     ${SRB2_SRC}/sdl/dosstr.c
@@ -149,7 +154,7 @@ target_compile_definitions(ringracers PRIVATE
     SOUND=SOUND_MIXER
     DIRECTFULLSCREEN
     
-    # Disable features
+    # Disable features for Android
     NONX86
     NOASM
     NOEXECINFO
@@ -158,7 +163,10 @@ target_compile_definitions(ringracers PRIVATE
     NOHW
     NONET
     NOMUMBLE
-    NOPNG      # Disable PNG - no libpng
+    NOPNG
+    NOVOICE      # Disable voice chat (opus)
+    NOCURL       # Disable curl
+    NOPOSTPROCESSING
     
     HAVE_ZLIB
     HAVE_THREADS
