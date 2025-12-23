@@ -47,6 +47,7 @@ endif()
 # Source paths
 #######################################
 set(SRB2_SRC "${CMAKE_CURRENT_SOURCE_DIR}/../../../../../src")
+set(THIRDPARTY "${CMAKE_CURRENT_SOURCE_DIR}/../../../../../thirdparty")
 
 if(NOT EXISTS "${SRB2_SRC}/doomdef.h")
     message(FATAL_ERROR "Ring Racers source not found: ${SRB2_SRC}")
@@ -63,14 +64,14 @@ file(GLOB CORE_CPP_SOURCES "${SRB2_SRC}/*.cpp")
 
 # Remove files we don't need for Android
 list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*apng\\.c$")
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*d_clisrv\\.c$")      # Network - uses opus
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*d_net\\.cpp$")       # Network
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*d_netfil\\.c$")      # Network
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*d_netcmd\\.c$")      # Network
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*mserv\\.c$")         # Master server
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*http-mserv\\.c$")    # HTTP master server
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*i_tcp\\.c$")         # TCP networking
-list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*stun\\.cpp$")        # STUN
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*d_clisrv\\.c$")
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*d_netfil\\.c$")
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*d_netcmd\\.c$")
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*mserv\\.c$")
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*http-mserv\\.c$")
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*i_tcp\\.c$")
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*m_perfstats\\.c$")   # Uses ps_hw_* when NOHW
+list(FILTER CORE_C_SOURCES EXCLUDE REGEX ".*discord\\.c$")       # Discord RPC
 list(FILTER CORE_CPP_SOURCES EXCLUDE REGEX ".*d_net\\.cpp$")
 list(FILTER CORE_CPP_SOURCES EXCLUDE REGEX ".*stun\\.cpp$")
 
@@ -164,9 +165,10 @@ target_compile_definitions(ringracers PRIVATE
     NONET
     NOMUMBLE
     NOPNG
-    NOVOICE      # Disable voice chat (opus)
-    NOCURL       # Disable curl
+    NOVOICE
+    NOCURL
     NOPOSTPROCESSING
+    NO_DISCORD
     
     HAVE_ZLIB
     HAVE_THREADS
@@ -183,6 +185,9 @@ target_include_directories(ringracers PRIVATE
     ${SRB2_SRC}/blua
     ${SRB2_SRC}/sdl
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${THIRDPARTY}/tcbrindle_span/include
+    ${THIRDPARTY}/fmt/include
+    ${THIRDPARTY}/nlohmann-json/include
     $<TARGET_PROPERTY:SDL2,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
