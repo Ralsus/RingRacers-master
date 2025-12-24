@@ -16,6 +16,7 @@
 #include "z_zone.h"
 #include "p_local.h"
 #include "p_spec.h"
+#include "p_slopes.h"
 #include "taglist.h"
 
 /*
