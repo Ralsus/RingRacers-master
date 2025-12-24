@@ -81,6 +81,7 @@ set(SDL_SOURCES
     ${SRB2_SRC}/sdl/i_video.cpp
     ${SRB2_SRC}/sdl/i_main.cpp
     ${SRB2_SRC}/sdl/i_threads.c
+    ${SRB2_SRC}/sdl/rhi_gles2_platform.cpp
     ${SRB2_SRC}/sdl/new_sound.cpp
     ${SRB2_SRC}/sdl/dosstr.c
     ${SRB2_SRC}/sdl/endtxt.c
@@ -116,6 +117,23 @@ file(GLOB MODP_SOURCES "${SRB2_SRC}/modp_b64/*.c")
 # IO
 file(GLOB IO_SOURCES "${SRB2_SRC}/io/*.c" "${SRB2_SRC}/io/*.cpp")
 
+# RHI (Rendering Hardware Interface)
+file(GLOB RHI_SOURCES "${SRB2_SRC}/rhi/*.cpp" "${SRB2_SRC}/rhi/*.c")
+# Android uses GLES2
+file(GLOB RHI_BACKEND_SOURCES "${SRB2_SRC}/rhi/gles2/*.cpp")
+
+# HWR2 (Hardware Renderer 2)
+file(GLOB HWR2_SOURCES "${SRB2_SRC}/hwr2/*.cpp")
+
+# ImGui
+file(GLOB IMGUI_SOURCES "${THIRDPARTY}/imgui/*.cpp")
+
+# GLAD
+set(GLAD_SOURCES "${THIRDPARTY}/glad/src/gles2.c")
+
+# STB
+file(GLOB STB_SOURCES "${THIRDPARTY}/stb/*.c")
+
 # JNI bridge
 set(ANDROID_JNI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/android_jni.cpp
@@ -139,6 +157,12 @@ add_library(ringracers SHARED
     ${MONOCYPHER_SOURCES}
     ${MODP_SOURCES}
     ${IO_SOURCES}
+    ${RHI_SOURCES}
+    ${RHI_BACKEND_SOURCES}
+    ${HWR2_SOURCES}
+    ${IMGUI_SOURCES}
+    ${GLAD_SOURCES}
+    ${STB_SOURCES}
     ${ANDROID_JNI_SOURCES}
 )
 
@@ -175,6 +199,9 @@ target_compile_definitions(ringracers PRIVATE
     
     CMAKECONFIG
     _LARGEFILE64_SOURCE
+    
+    # RHI/HWR2 definitions
+    SRB2_CONFIG_USE_GLES2
 )
 
 #######################################
@@ -190,6 +217,12 @@ target_include_directories(ringracers PRIVATE
     ${THIRDPARTY}/nlohmann-json/include
     ${THIRDPARTY}/stb/include
     ${THIRDPARTY}/xmp-lite/include/libxmp-lite
+    ${THIRDPARTY}/imgui
+    ${THIRDPARTY}/imgui_config
+    ${THIRDPARTY}/glm
+    ${THIRDPARTY}/glad/include
+    ${THIRDPARTY}/tracy/include
+    ${THIRDPARTY}/vulkan-headers/include
     $<TARGET_PROPERTY:SDL2,INTERFACE_INCLUDE_DIRECTORIES>
 )
 

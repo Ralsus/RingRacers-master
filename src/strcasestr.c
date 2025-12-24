@@ -1,6 +1,12 @@
 /*
 strcasestr -- case insensitive substring searching function.
 */
+
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
+#include <ctype.h>
+
 /*
 Copyright 2019-2020 James R.
 All rights reserved.

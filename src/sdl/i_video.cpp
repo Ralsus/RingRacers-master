@@ -22,8 +22,13 @@
 #include <imgui.h>
 
 #include "../rhi/rhi.hpp"
+#ifdef SRB2_CONFIG_USE_GLES2
+#include "../rhi/gles2/gles2_rhi.hpp"
+#include "rhi_gles2_platform.hpp"
+#else
 #include "../rhi/gl2/gl2_rhi.hpp"
 #include "rhi_gl2_platform.hpp"
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4214 4244)
