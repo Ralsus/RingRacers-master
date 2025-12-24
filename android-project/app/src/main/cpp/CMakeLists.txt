@@ -219,7 +219,7 @@ target_include_directories(ringracers PRIVATE
     ${THIRDPARTY}/xmp-lite/include/libxmp-lite
     ${THIRDPARTY}/imgui
     ${THIRDPARTY}/imgui_config
-    ${THIRDPARTY}/glm
+    ${THIRDPARTY}/glm/include
     ${THIRDPARTY}/glad/include
     ${THIRDPARTY}/tracy/include
     ${THIRDPARTY}/vulkan-headers/include
